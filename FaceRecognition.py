@@ -13,7 +13,7 @@ cam.set(4, 640) # Height
 while True:
     success, img = cam.read()
 
-    text = 'Face is not recognized'
+    text = 'Face is not detected'
 
     # passing the algorithm to OpenCV
     haar_cascade = cv2.CascadeClassifier(alg)
@@ -21,9 +21,13 @@ while True:
     #convert a color image to gray image
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # display the text on the image
-    image = cv2.putText(img, text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    face_detect = haar_cascade.detectMultiScale(img_gray, 1.1, 4)
 
+    for(x,y,w,h) in face_detect:
+        text = 'Face detected'
+        cv2.rectangle(img, (x,y), (x+w,y+h), (0, 255, 0), 2)
+
+    image = cv2.putText(img, text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
     cv2.imshow('Face Recognition', img)
 
     key = cv2.waitKey(10)
